@@ -30,7 +30,12 @@ const config: Config = {
       'valentine',
       'halloween',
       'garden',
-      'forest',
+      {
+        forest: {
+          ...require('./node_modules/daisyui/src/theming/themes')['forest'],
+          '--rounded-btn': '.5rem',
+        },
+      },
       'aqua',
       'lofi',
       'pastel',
