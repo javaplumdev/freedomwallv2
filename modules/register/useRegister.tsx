@@ -1,17 +1,22 @@
 'use client';
 import { useState } from 'react';
 
+import { toast } from 'react-toastify';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import { auth } from '@/db/firebase';
+import { useRouter } from 'next/navigation';
+
+import { toast_config } from '@/config/toast';
 
 type Inputs = {
   email: string;
   password: string;
+  confirm_password: string;
 };
 
-const useLogin = () => {
+const useRegister = () => {
   const {
     register,
     handleSubmit,
@@ -19,6 +24,8 @@ const useLogin = () => {
   } = useForm<Inputs>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const router = useRouter();
+  const { push } = router;
 
   const onSubmit: SubmitHandler<any> = (data) => onSignin(data);
 
@@ -28,9 +35,10 @@ const useLogin = () => {
     try {
       const { email, password } = data;
 
-      await signInWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
 
-      console.log('logged in!');
+      toast.success('Account created! Please log in.', toast_config as any);
+      push('/');
     } catch (e: any) {
       const { message } = e;
 
@@ -43,4 +51,4 @@ const useLogin = () => {
   return { onSubmit, register, errors, handleSubmit, isLoading, error };
 };
 
-export default useLogin;
+export default useRegister;

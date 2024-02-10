@@ -1,23 +1,37 @@
 import React from 'react';
+import Icon from '../icons/Icon';
+import { useRouter } from 'next/navigation';
 
 const Form = (props: any) => {
-  const { errors, register } = props;
+  const { errors, register, error } = props;
+  const router = useRouter();
+
+  const { push } = router;
 
   return (
     <>
-      <h1 className="text-3xl font-bold self-center">Log in</h1>
+      <h1 className="text-2xl font-bold self-center">Log in</h1>
 
       <span className="self-center">
         Don't have an account?
-        <a className="link link-secondary">Register</a>
+        <a className="link link-secondary" onClick={() => push('/register')}>
+          Register
+        </a>
       </span>
 
-      <a className="btn btn-neutral">
+      <a className="btn btn-neutral w-100">
         <i className="fa-brands fa-google text-primary"></i>
         Log in with Google
       </a>
 
       <div className="divider">OR</div>
+
+      {error && (
+        <div role="alert" className="alert alert-error">
+          <Icon label="warning" />
+          <span>{error}</span>
+        </div>
+      )}
 
       <label className="form-control">
         <div className="label">
@@ -25,7 +39,7 @@ const Form = (props: any) => {
         </div>
 
         <input {...register('email', { required: true })} className="input input-bordered" />
-        {errors.email && <span className="text-red-600 my-2.5">This field is required</span>}
+        {errors.email && <span className="text-red-600 my-.5">This field is required</span>}
       </label>
 
       <label className="form-control">
